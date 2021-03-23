@@ -1,28 +1,26 @@
 import dnspod
-import sys
-import time
 import os
 
 
 def main():
     os.system('')
-    print('\033[1;37;44m DNSPOD UPDATER 1.0 \033[0m\n')
+    print('\033[1;37;44m DNSPOD UPDATER 1.0.1 \033[0m\n')
     try:
         dnspod.load_config()
     except Exception as e:
         dnspod.log('ERROR', '文件config.json可能已经损坏')
-        sys.exit(1)
+        dnspod.exit_after_countdown()
     try:
         headers, params, domains = dnspod.load_domains()
     except Exception as e:
         dnspod.log('ERROR', '文件domains.json可能已经损坏')
-        sys.exit(1)
+        dnspod.exit_after_countdown()
     dnspod.update_ip()
     try:
         domain_list = dnspod.get_domain_list(headers, params)
     except Exception as e:
         dnspod.log('ERROR', e)
-        sys.exit(1)
+        dnspod.exit_after_countdown()
     success = []
     fail = []
     for d in domains:
@@ -79,8 +77,7 @@ def main():
         for i in fail:
             print('\t - {}'.format(i))
     print()
-    dnspod.log('INFO', '此窗口将在{}秒后关闭'.format(dnspod.CLOSE_TIMEOUT))
-    time.sleep(dnspod.CLOSE_TIMEOUT)
+    dnspod.exit_after_countdown()
 
 
 if __name__ == '__main__':

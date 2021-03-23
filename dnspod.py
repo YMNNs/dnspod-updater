@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import requests
 import json
 import time
@@ -20,6 +21,11 @@ IPV4 = ''
 IPV6 = ''
 CLOSE_TIMEOUT = 5
 
+
+def exit_after_countdown():
+    log('INFO', '程序将在{}秒后退出'.format(CLOSE_TIMEOUT))
+    time.sleep(CLOSE_TIMEOUT)
+    sys.exit(0)
 
 def get_windows_ipv6_address():
     output = os.popen("ipconfig /all").read()

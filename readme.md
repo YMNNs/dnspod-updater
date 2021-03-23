@@ -46,7 +46,7 @@
 
      ```json
      {"headers": {
-         "User-Agent": "DNSPOD UPDATER 1.0(your@ema.il)"
+         "User-Agent": "DNSPOD UPDATER 1.0.1(your@ema.il)"
        },
        "params": {
          "login_token": "xxxxxx,xxxxxxxxxxxxxxxxxxx",
