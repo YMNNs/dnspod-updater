@@ -20,12 +20,17 @@ REGEX_IPV4 = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]
 IPV4 = ''
 IPV6 = ''
 CLOSE_TIMEOUT = 5
+VERSION = 'DNSPOD_UPDATER/1.0.2'
 
 
 def exit_after_countdown():
+    if CLOSE_TIMEOUT < 0:
+        os.system('pause')
+        sys.exit(0)
     log('INFO', '程序将在{}秒后退出'.format(CLOSE_TIMEOUT))
     time.sleep(CLOSE_TIMEOUT)
     sys.exit(0)
+
 
 def get_windows_ipv6_address():
     output = os.popen("ipconfig /all").read()
@@ -127,14 +132,17 @@ class Record:
 def load_domains():
     with open('domains.json', 'r') as f:
         config = json.load(f)
-    headers = config.get('headers')
+    headers = {'User-Agent': '{}({})'.format(VERSION, config.get('email'))}
     params = config.get('params')
     domains = config.get('domains')
     records = []
     for domain in domains:
         record = Record()
         record.name = domain.get('name')
-        record.sub_domain = domain.get('sub_domain')
+        if record.sub_domain != '':
+            record.sub_domain = domain.get('sub_domain')
+        else:
+            record.sub_domain = '@'
         record.record_type = domain.get('record_type')
         record.value = domain.get('value')
         records.append(record)
@@ -183,7 +191,6 @@ def get_domain_info(name, domain_list):
     for domain in domain_list:
         if domain.get('name').lower() == name.lower():
             return domain
-    log('WARN', '未找到域名{}'.format(name))
     raise NameError('未找到域名{}'.format(name))
 
 
@@ -196,7 +203,6 @@ def get_record_info(record_list, sub_domain):
     for record in record_list:
         if record.get('name').lower() == sub_domain.lower():
             return record
-    log('WARN', '未找到记录{}'.format(sub_domain))
     raise NameError('未找到记录{}'.format(sub_domain))
 
 
@@ -236,3 +242,10 @@ def log(log_type, text):
     else:
         tag = '\033[1;30;47m UNK \033[0m'
     print('{} {} {}'.format(now, tag, text))
+
+
+def sub_domain_and_domain(sub_domain, domain):
+    if sub_domain == '@':
+        return domain
+    else:
+        return '{}.{}'.format(sub_domain, domain)

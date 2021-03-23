@@ -1,6 +1,5 @@
-{"headers": {
-    "User-Agent": "DNSPOD UPDATER 1.0.1(your@ema.il)"
-  },
+{
+  "email": "your@ema.il",
   "params": {
     "login_token": "xxxxxx,xxxxxxxxxxxxxxxxxxx",
     "format": "json",
@@ -26,4 +25,5 @@
       "record_type": "A",
       "value": "123.123.123.123"
     }
-  ]}
+  ]
+}

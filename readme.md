@@ -35,7 +35,7 @@
 
    + ```get_ipv6_command```和```get_ipv4_command```分别是通过shell/cmd获取本机IPv6和IPv4的命令。
 
-   + ```close_timeout```是程序运行结束后的退出倒计时，以秒为单位。
+   + ```close_timeout```是程序运行结束后的退出倒计时，以秒为单位，当设置值小于0时程序结束后不退出。
 
    + 其余部分是Dnspod的API地址，无需修改。
 
@@ -45,9 +45,8 @@
    + 示例：
 
      ```json
-     {"headers": {
-         "User-Agent": "DNSPOD UPDATER 1.0.1(your@ema.il)"
-       },
+     { 
+       "email": "your@ema.il",
        "params": {
          "login_token": "xxxxxx,xxxxxxxxxxxxxxxxxxx",
          "format": "json",
@@ -75,8 +74,8 @@
          }
        ]}
      ```
-   
-   + ```User-Agent```: 请将其中的```your@ema.il```改为你的电子邮件地址。
+     
+   + ```email```: 你的电子邮件地址，仅用于向Dnspod发送请求的User-Agent。
    
    + ```login_token```: 请在[Dnspod密钥管理](https://docs.dnspod.cn/account/5f2d466de8320f1a740d9ff3/)中查看生成方法，完整的Token 是由 ID,Token 组合而成的，用英文的逗号分割。
    
