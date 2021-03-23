@@ -76,7 +76,7 @@ def main():
         dnspod.log('INFO', '完成，\n\n 以下域名的DNS记录未被更改:')
         for i in fail:
             print('     - {}'.format(i))
-    print()
+    print('')
     dnspod.exit_after_countdown()
 
 

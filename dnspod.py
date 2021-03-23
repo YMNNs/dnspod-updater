@@ -43,7 +43,6 @@ def get_ipv4_command(command):
     if re.match(REGEX_IPV4, ipv4):
         return ipv4
     else:
-        log('WARN', '无效IPV4地址')
         raise ValueError('无效IPV4地址')
 
 
@@ -53,7 +52,6 @@ def get_ipv6_command(command):
     if re.match(REGEX_IPV6, ipv6):
         return ipv6
     else:
-        log('WARN', '无效IPV6地址')
         raise ValueError('无效IPV6地址')
 
 
@@ -63,10 +61,8 @@ def get_ipv6_request(url):
         if re.match(REGEX_IPV6, response.text):
             return response.text
         else:
-            log('WARN', '无效IPV6地址')
             raise ValueError('无效IPV6地址')
     else:
-        log('WARN', '连接API失败')
         raise ConnectionError('连接API失败')
 
 
@@ -76,10 +72,8 @@ def get_ipv4_request(url):
         if re.match(REGEX_IPV4, response.text):
             return response.text
         else:
-            log('WARN', '无效IPV4地址')
             raise ValueError('无效IPV4地址')
     else:
-        log('WARN', '连接API失败')
         raise ConnectionError('连接API失败')
 
 
@@ -139,7 +133,7 @@ def load_domains():
     for domain in domains:
         record = Record()
         record.name = domain.get('name')
-        if record.sub_domain != '':
+        if domain.get('sub_domain') != '':
             record.sub_domain = domain.get('sub_domain')
         else:
             record.sub_domain = '@'
@@ -227,7 +221,6 @@ def send_post(url, headers, params):
             raise ValueError(
                 '{} ({})'.format(response_dict.get('status').get('message'), response_dict.get('status').get('code')))
     else:
-        log('ERROR', '连接API失败')
         raise ConnectionError('连接API失败')
 
 
