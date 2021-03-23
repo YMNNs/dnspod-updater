@@ -4,7 +4,7 @@ import os
 
 def main():
     os.system('')
-    print('\033[1;37;44m DNSPOD UPDATER 1.0.1 \033[0m\n')
+    print('\033[1;37;44m {} \033[0m\n'.format(dnspod.VERSION))
     try:
         dnspod.load_config()
     except Exception as e:
