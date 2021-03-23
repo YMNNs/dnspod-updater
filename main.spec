@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['D:\\PythonTraining\\IPV6_DDNS'],
+             pathex=['D:\\PythonTraining\\DNSPOD_UPDATER'],
              binaries=[],
              datas=[],
              hiddenimports=[],

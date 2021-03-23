@@ -21,7 +21,7 @@ def main():
     try:
         domain_list = dnspod.get_domain_list(headers, params)
     except Exception as e:
-        print(e)
+        dnspod.log('ERROR', e)
         sys.exit(1)
     success = []
     fail = []
