@@ -1,0 +1,29 @@
+{"headers": {
+    "User-Agent": "DNSPOD UPDATER 1.0(your@ema.il)"
+  },
+  "params": {
+    "login_token": "xxxxxx,xxxxxxxxxxxxxxxxxxx",
+    "format": "json",
+    "lang": "cn",
+    "error_on_empty": "no"
+  },
+  "domains": [
+    {
+      "name": "example.com",
+      "sub_domain": "@",
+      "record_type": "A",
+      "value": "$local_ipv4"
+    },
+    {
+      "name": "example.com",
+      "sub_domain": "www",
+      "record_type": "AAAA",
+      "value": "$local_ipv6"
+    },
+    {
+      "name": "example.com",
+      "sub_domain": "mirror",
+      "record_type": "A",
+      "value": "123.123.123.123"
+    }
+  ]}

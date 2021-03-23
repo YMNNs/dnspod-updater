@@ -1,0 +1,13 @@
+{
+    "get_ipv6_method": "request",
+    "get_ipv4_method": "request",
+    "get_ipv6_request_url": "https://v6.ident.me/",
+    "get_ipv4_request_url": "https://v4.ident.me/",
+    "get_ipv6_command": "ipconfig /all",
+    "get_ipv4_command": "",
+    "get_domain_list_url": "https://dnsapi.cn/Domain.List",
+    "get_record_list_url": "https://dnsapi.cn/Record.List",
+    "get_qualified_record_type_url": "https://dnsapi.cn/Record.Type",
+    "modify_record_url": "https://dnsapi.cn/Record.Modify",
+    "close_timeout": 5
+}
