@@ -4,7 +4,9 @@ import sys
 import requests
 import json
 import time
+import copy
 
+DEBUG = False
 GET_DOMAIN_LIST_URL = ''
 GET_RECORD_LIST_URL = ''
 GET_QUALIFIED_RECORD_TYPE_URL = ''
@@ -20,10 +22,14 @@ REGEX_IPV4 = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]
 IPV4 = ''
 IPV6 = ''
 CLOSE_TIMEOUT = 5
-VERSION = 'DNSPOD_UPDATER/1.0.2'
+VERSION = 'DNSPOD_UPDATER/1.1'
+SERVICE = False
+CHECK_INTERVAL = 3600
 
 
 def exit_after_countdown():
+    if SERVICE:
+        return
     if CLOSE_TIMEOUT < 0:
         os.system('pause')
         sys.exit(0)
@@ -124,8 +130,12 @@ class Record:
 
 
 def load_domains():
-    with open('domains.json', 'r') as f:
-        config = json.load(f)
+    if DEBUG:
+        with open('domains_test.json', 'r') as f:
+            config = json.load(f)
+    else:
+        with open('domains.json', 'r') as f:
+            config = json.load(f)
     headers = {'User-Agent': '{}({})'.format(VERSION, config.get('email'))}
     params = config.get('params')
     domains = config.get('domains')
@@ -145,40 +155,52 @@ def load_domains():
 
 
 def load_config():
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-        global GET_DOMAIN_LIST_URL
-        GET_DOMAIN_LIST_URL = config.get('get_domain_list_url')
-        global GET_RECORD_LIST_URL
-        GET_RECORD_LIST_URL = config.get('get_record_list_url')
-        global GET_QUALIFIED_RECORD_TYPE_URL
-        GET_QUALIFIED_RECORD_TYPE_URL = config.get('get_qualified_record_type_url')
-        global MODIFY_RECORD_URL
-        MODIFY_RECORD_URL = config.get('modify_record_url')
-        global GET_IPV6_METHOD
-        GET_IPV6_METHOD = config.get('get_ipv6_method')
-        if GET_IPV6_METHOD.lower() == 'request':
-            global GET_IPV6_REQUEST_URL
-            GET_IPV6_REQUEST_URL = config.get('get_ipv6_request_url')
-        else:
-            GET_IPV6_METHOD = 'command'
-            global GET_IPV6_COMMAND
-            GET_IPV6_COMMAND = config.get('get_ipv6_command')
-        global GET_IPV4_METHOD
-        GET_IPV4_METHOD = config.get('get_ipv4_method')
-        if GET_IPV4_METHOD.lower() == 'request':
-            global GET_IPV4_REQUEST_URL
-            GET_IPV4_REQUEST_URL = config.get('get_ipv4_request_url')
-        else:
-            GET_IPV4_METHOD = 'command'
-            global GET_IPV4_COMMAND
-            GET_IPV4_COMMAND = config.get('get_ipv4_command')
-        global CLOSE_TIMEOUT
-        CLOSE_TIMEOUT = config.get('close_timeout')
+    if DEBUG:
+        with open('config_test.json', 'r') as f:
+            config = json.load(f)
+    else:
+        with open('config.json', 'r') as f:
+            config = json.load(f)
+    global GET_DOMAIN_LIST_URL
+    GET_DOMAIN_LIST_URL = config.get('get_domain_list_url')
+    global GET_RECORD_LIST_URL
+    GET_RECORD_LIST_URL = config.get('get_record_list_url')
+    global GET_QUALIFIED_RECORD_TYPE_URL
+    GET_QUALIFIED_RECORD_TYPE_URL = config.get('get_qualified_record_type_url')
+    global MODIFY_RECORD_URL
+    MODIFY_RECORD_URL = config.get('modify_record_url')
+    global GET_IPV6_METHOD
+    GET_IPV6_METHOD = config.get('get_ipv6_method')
+    if GET_IPV6_METHOD.lower() == 'request':
+        global GET_IPV6_REQUEST_URL
+        GET_IPV6_REQUEST_URL = config.get('get_ipv6_request_url')
+    else:
+        GET_IPV6_METHOD = 'command'
+        global GET_IPV6_COMMAND
+        GET_IPV6_COMMAND = config.get('get_ipv6_command')
+    global GET_IPV4_METHOD
+    GET_IPV4_METHOD = config.get('get_ipv4_method')
+    if GET_IPV4_METHOD.lower() == 'request':
+        global GET_IPV4_REQUEST_URL
+        GET_IPV4_REQUEST_URL = config.get('get_ipv4_request_url')
+    else:
+        GET_IPV4_METHOD = 'command'
+        global GET_IPV4_COMMAND
+        GET_IPV4_COMMAND = config.get('get_ipv4_command')
+    global CLOSE_TIMEOUT
+    CLOSE_TIMEOUT = config.get('close_timeout')
+    global SERVICE
+    SERVICE = config.get('service')
+    global CHECK_INTERVAL
+    CHECK_INTERVAL = config.get('check_interval')
+    if CHECK_INTERVAL < 1:
+        log('WARN', '无效的运行间隔，已取消服务模式')
+        SERVICE = False
 
 
 def get_domain_list(headers, params):
-    return send_post(GET_DOMAIN_LIST_URL, headers, params).get('domains')
+    local_params = copy.deepcopy(params)
+    return send_post(GET_DOMAIN_LIST_URL, headers, local_params).get('domains')
 
 
 def get_domain_info(name, domain_list):
@@ -189,8 +211,9 @@ def get_domain_info(name, domain_list):
 
 
 def get_record_list(domain_id, headers, params):
-    params.update({'domain_id': domain_id})
-    return send_post(GET_RECORD_LIST_URL, headers, params).get('records')
+    local_params = copy.deepcopy(params)
+    local_params.update({'domain_id': domain_id})
+    return send_post(GET_RECORD_LIST_URL, headers, local_params).get('records')
 
 
 def get_record_info(record_list, sub_domain):
@@ -201,17 +224,22 @@ def get_record_info(record_list, sub_domain):
 
 
 def get_qualified_record_type(domain_grade, headers, params):
-    params.update({'domain_grade': domain_grade})
-    return send_post(GET_QUALIFIED_RECORD_TYPE_URL, headers, params).get('types')
+    local_params = copy.deepcopy(params)
+    local_params.update({'domain_grade': domain_grade})
+    return send_post(GET_QUALIFIED_RECORD_TYPE_URL, headers, local_params).get('types')
 
 
 def modify_record(domain_id, record_id, sub_domain, record_type, record_line, value, mx, headers, params):
-    params.update({'domain_id': domain_id, 'record_id': record_id, 'sub_domain': sub_domain, 'record_type': record_type,
-                   'record_line': record_line, 'value': value, 'mx': mx, })
-    return send_post(MODIFY_RECORD_URL, headers, params)
+    local_params = copy.deepcopy(params)
+    local_params.update(
+        {'domain_id': domain_id, 'record_id': record_id, 'sub_domain': sub_domain, 'record_type': record_type,
+         'record_line': record_line, 'value': value, 'mx': mx, })
+    return send_post(MODIFY_RECORD_URL, headers, local_params)
 
 
 def send_post(url, headers, params):
+    if DEBUG:
+        log('DEBUG', 'API POST: ' + url)
     response = requests.post(url, data=params, headers=headers)
     if response.status_code == 200:
         response_dict = json.loads(response.text)
@@ -225,13 +253,15 @@ def send_post(url, headers, params):
 
 
 def log(log_type, text):
-    now = time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
+    now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     if log_type == 'INFO':
         tag = '\033[1;37;42m INFO \033[0m'
     elif log_type == 'WARN':
         tag = '\033[1;37;43m WARN \033[0m'
     elif log_type == 'ERROR':
         tag = '\033[1;37;41m ERROR \033[0m'
+    elif log_type == 'DEBUG':
+        tag = '\033[1;37;44m DEBUG \033[0m'
     else:
         tag = '\033[1;30;47m UNK \033[0m'
     print('{} {} {}'.format(now, tag, text))

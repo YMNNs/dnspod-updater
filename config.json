@@ -9,5 +9,7 @@
   "get_record_list_url": "https://dnsapi.cn/Record.List",
   "get_qualified_record_type_url": "https://dnsapi.cn/Record.Type",
   "modify_record_url": "https://dnsapi.cn/Record.Modify",
-  "close_timeout": 5
+  "close_timeout": 5,
+  "service": false,
+  "check_interval": 3600
 }
