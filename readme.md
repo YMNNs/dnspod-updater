@@ -26,9 +26,9 @@
      "modify_record_url": "https://dnsapi.cn/Record.Modify",
      "close_timeout": 5,
      "service": false,
-  "check_interval": 3600
+     "check_interval": 3600
    }
-```
+   ```
    
 
    
