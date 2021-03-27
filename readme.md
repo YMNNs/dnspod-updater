@@ -32,11 +32,11 @@
    
 
    
-+ ```get_ipv6_method```和```get_ipv4_method```分别是获取本机IPv6和IPv4的方法，可用选项有```request```（通过网络请求获取）和```command```（通过命令行获取）。
+   + ```get_ipv6_method```和```get_ipv4_method```分别是获取本机IPv6和IPv4的方法，可用选项有```request```（通过网络请求获取）和```command```（通过命令行获取）。
    
-> 当系统启用了临时IPv6时，通过网络请求获取的IPv6地址是临时地址，系统防火墙会阻止全部传入连接。
+   > 当系统启用了临时IPv6时，通过网络请求获取的IPv6地址是临时地址，系统防火墙会阻止全部传入连接。
    
-+ ```get_ipv6_request_url```和```get_ipv4_request_url```分别是通过网络请求获取本机IPv6和IPv4的URL，向该URL发送请求会直接返回本机的IPv6或IPv4地址。
+   + ```get_ipv6_request_url```和```get_ipv4_request_url```分别是通过网络请求获取本机IPv6和IPv4的URL，向该URL发送请求会直接返回本机的IPv6或IPv4地址。
    
    + ```get_ipv6_command```和```get_ipv4_command```分别是通过shell/cmd获取本机IPv6和IPv4的命令。
    
