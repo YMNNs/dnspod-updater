@@ -4,7 +4,7 @@
 ## 开始使用
 在使用此程序之前，你需要在[dnspod.cn](https://dnspod.cn)上绑定域名，并创建解析记录。
 
-+ **请注意：DNSPOD UPDATER只能修改已经存在的记录，不能添加或删除记录。**
+> DNSPOD UPDATER只能修改已经存在的记录，不能添加或删除记录。
 
 1. 在[Release页面](https://github.com/YMNNs/DNSPOD_UPDATER/releases)下载编译好的程序
 
