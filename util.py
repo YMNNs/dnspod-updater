@@ -22,7 +22,7 @@ REGEX_IPV4 = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]
 IPV4 = ''
 IPV6 = ''
 CLOSE_TIMEOUT = 5
-VERSION = 'DNSPOD_UPDATER/1.1'
+VERSION = 'DNSPOD_UPDATER/1.1.1'
 SERVICE = False
 CHECK_INTERVAL = 3600
 
@@ -216,9 +216,9 @@ def get_record_list(domain_id, headers, params):
     return send_post(GET_RECORD_LIST_URL, headers, local_params).get('records')
 
 
-def get_record_info(record_list, sub_domain):
+def get_record_info(record_list, sub_domain, record_type):
     for record in record_list:
-        if record.get('name').lower() == sub_domain.lower():
+        if record.get('name').lower() == sub_domain.lower() and record.get('type').lower() == record_type.lower():
             return record
     raise NameError('未找到记录{}'.format(sub_domain))
 

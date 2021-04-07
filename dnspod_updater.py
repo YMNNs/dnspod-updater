@@ -54,7 +54,7 @@ def run_once():
                 util.log('ERROR', '记录类型{}不在可用类型{}中'.format(d.record_type, qualified_record_types))
                 continue
             record_list = util.get_record_list(domain.get('id'), headers, params)
-            record = util.get_record_info(record_list, d.sub_domain)
+            record = util.get_record_info(record_list, d.sub_domain, d.record_type)
             domain_id = domain.get('id')
             record_id = record.get('id')
             sub_domain = d.sub_domain
