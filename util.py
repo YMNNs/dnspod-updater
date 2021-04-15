@@ -22,9 +22,16 @@ REGEX_IPV4 = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]
 IPV4 = ''
 IPV6 = ''
 CLOSE_TIMEOUT = 5
-VERSION = 'DNSPOD_UPDATER/1.1.1'
+VERSION = 'DNSPOD_UPDATER/1.1.2'
 SERVICE = False
 CHECK_INTERVAL = 3600
+
+
+def clear_ip():
+    global IPV4
+    global IPV6
+    IPV4 = ''
+    IPV6 = ''
 
 
 def exit_after_countdown():
